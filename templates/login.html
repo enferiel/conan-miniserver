@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h2>Conan Mini-server</h2>
+    <form method="POST" action="{{ url_for('login') }}">
+        <input type="password" name="password" placeholder="Enter Password">
+        <input type="submit" value="Login">
+    </form>
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+</body>
+</html>

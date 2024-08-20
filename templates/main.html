@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conan Mini-server</title>
+    <style>
+        .highlight {
+            background-color: lightcoral;
+        }
+    </style>
+</head>
+<body>
+    <h2>Conan Mini-server</h2>
+    <form method="POST" action="{{ url_for('refresh') }}" style="display:inline;">
+        Threshold [hours]
+        <input type="number" name="threshold" placeholder="Enter threshold" value="{{ threshold }}" required>
+        <input type="submit" value="Refresh">
+    </form>
+    <form method="POST" action="{{ url_for('logout') }}" style="display:inline;">
+        <input type="submit" value="Log Off">
+    </form>
+
+    <h3>Player Activity</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Online [hours]</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr class="{% if row[2] < threshold * 3600 %}highlight{% endif %}">
+                <td>{{ row[0] }}</td>
+                    <td>{{ row[1] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

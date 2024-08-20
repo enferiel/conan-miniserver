@@ -1,0 +1,5 @@
+host: 127.0.0.1
+port: 5000
+password: lemmein
+secret_key: very_secret_key
+db_path: /mnt/c/BackupDB
