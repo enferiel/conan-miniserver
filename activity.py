@@ -74,7 +74,7 @@ def parse_logs(db_dir: pathlib.Path) -> list[Log]:
     logs: list[Log] = []
     for log_file in db_dir.rglob("*.log"):
         events: list[PlayerEvent] = []
-        with open(log_file, "r") as file:
+        with open(log_file, "r", encoding="utf-8") as file:
             for line in file.readlines():
                 if "Join succeeded" in line or "Player disconnected" in line:
                     player = _parse_player(line)
