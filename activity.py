@@ -48,11 +48,17 @@ class Log:
         return durations
 
 
-def _parse_player(line: str) -> str:
-    return line.strip().split()[-1]
+def _parse_player(line: str) -> str | None:
+    pattern = r"(?:Join succeeded: |Player disconnected: )(.+)"
+    match = re.search(pattern, line.strip())
+
+    if not match:
+        return None
+
+    return match.group(1)
 
 
-def _parse_timestamp(line: str) -> datetime.datetime:
+def _parse_timestamp(line: str) -> datetime.datetime | None:
     pattern = r"^\[(\d{4}\.\d{2}\.\d{2}-\d{2}\.\d{2}\.\d{2}:\d{3})\].*"
     match = re.search(pattern, line.strip())
 
@@ -72,10 +78,13 @@ def parse_logs(db_dir: pathlib.Path) -> list[Log]:
             for line in file.readlines():
                 if "Join succeeded" in line or "Player disconnected" in line:
                     player = _parse_player(line)
-                    if player == "Unknown":
+                    if player == "Unknown" or player is None:
                         continue
 
                     timestamp = _parse_timestamp(line)
+                    if timestamp is None:
+                        continue
+
                     event_type = PlayerEventType.JOIN if "Join succeeded" in line else PlayerEventType.DISCONNECT
                     event = PlayerEvent(event_type, player, timestamp)
                     events.append(event)
